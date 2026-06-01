@@ -177,27 +177,42 @@ IT-ISO-0002-MONGODB.md
 IT-ISO-0003-STORAGE-BUCKET.md
 ```
 
-**Template comum de cada IT:**
+Cada IT segue a **mesma estrutura de seções de topo** do padrão (Objetivo, Abrangência, Responsabilidades, Matriz de registro), trocando "Política/Procedimento" pela seção própria da IT: **4. Instrução de trabalho**, onde fica todo o conteúdo técnico.
+
+### Definição de cada seção (IT)
+
+| Seção | O que descreve |
+|-------|----------------|
+| **1. Objetivo** | Propósito da IT e o resultado esperado. |
+| **2. Abrangência** | Escopo: tecnologia/versões cobertas e o **público-alvo** (quem executa — ex.: time do Setor DES ou TI responsável por aquela tecnologia). |
+| **3. Responsabilidades** | De forma sucinta, cargos/áreas que executam a IT. |
+| **4. Instrução de trabalho** | O passo a passo técnico (pré-requisitos, backup, restauração, teste, troubleshooting). |
+| **5. Matriz de registro** | Registros que a IT alimenta: identificação, local de armazenamento, tempo de retenção. "N/A" se não houver. |
+
+### Template comum de cada IT
 
 ```
 IT-ISO-{NNNN}-{TECNOLOGIA}.md
-├── 1. Objetivo e escopo (tecnologia, versões cobertas)
-├── 2. Pré-requisitos (acessos, ferramentas, variáveis de ambiente, permissões)
-├── 3. Procedimento de Backup
-│   ├── 3.1 Comando/ferramenta nativa (pg_dump, mongodump, aws s3 sync / gsutil rsync, versionamento de bucket…)
-│   ├── 3.2 Compressão e verificação de integridade (checksum)
-│   └── 3.3 Upload para o storage e versionamento
-├── 4. Procedimento de Restauração
-│   ├── 4.1 Pré-condições (parar serviço, espaço, permissões)
-│   ├── 4.2 Passo a passo numerado
-│   ├── 4.3 Validação pós-restauração (queries de sanidade, contagens)
-│   └── 4.4 Rollback em caso de falha
-├── 5. Procedimento de Teste de Restauração
-│   ├── 5.1 Provisionar ambiente isolado (docker-compose / sandbox)
-│   ├── 5.2 Executar restauração e medir tempo (vs. RTO)
-│   └── 5.3 Critérios de aprovação / falha
-├── 6. Erros comuns e troubleshooting
-└── 7. Registros gerados (quais REGs esta IT alimenta)
+├── 1. Objetivo (propósito da IT + resultado esperado)
+├── 2. Abrangência (tecnologia/versões cobertas; público-alvo: quem executa)
+├── 3. Responsabilidades (cargos/áreas que executam — sucinto)
+├── 4. Instrução de trabalho
+│   ├── 4.1 Pré-requisitos (acessos, ferramentas, variáveis de ambiente, permissões)
+│   ├── 4.2 Backup
+│   │   ├── 4.2.1 Comando/ferramenta nativa (pg_dump, mongodump, aws s3 sync / gsutil rsync, versionamento de bucket…)
+│   │   ├── 4.2.2 Compressão e verificação de integridade (checksum)
+│   │   └── 4.2.3 Upload para o storage e versionamento
+│   ├── 4.3 Restauração
+│   │   ├── 4.3.1 Pré-condições (parar serviço, espaço, permissões)
+│   │   ├── 4.3.2 Passo a passo numerado
+│   │   ├── 4.3.3 Validação pós-restauração (queries de sanidade, contagens)
+│   │   └── 4.3.4 Rollback em caso de falha
+│   ├── 4.4 Teste de restauração
+│   │   ├── 4.4.1 Provisionar ambiente isolado (docker-compose / sandbox)
+│   │   ├── 4.4.2 Executar restauração e medir tempo (vs. RTO)
+│   │   └── 4.4.3 Critérios de aprovação / falha
+│   └── 4.5 Erros comuns e troubleshooting
+└── 5. Matriz de registro (REGs que esta IT alimenta — identificação · local · retenção; "N/A" se não houver)
 ```
 
 A IT é o lugar dos comandos, scripts e checklists técnicos — pode ser revisada sem reabrir o PO.
@@ -228,10 +243,10 @@ A tabela detalhada abaixo descreve o conteúdo de cada REG (subsídio para criar
 | Registro | Conteúdo (colunas) | Alimentado por | Atende ao 8.13 |
 |----------|--------------------|----------------|----------------|
 | `REG-ISO-0001-INVENTARIO` | Base, tecnologia, ambiente, dono, tier, RPO/RTO, frequência, retenção, destino, criptografado? | Etapa 0 + manutenção contínua | Lista das bases que **precisam** de backup |
-| `REG-ISO-0002-EXECUCAO` | Data/hora, base, tipo (full/incr.), tamanho, duração, checksum, status, operador | Execução das ITs (item 3) | Registros precisos de cópias (8.13.a) |
-| `REG-ISO-0003-TESTE-RESTAURACAO` | Data, backup testado (data+hash), ambiente, executor, tempo vs. RTO, resultado, desvios, assinatura/aprovação | IT item 5 | Evidência de teste regular (8.13.e) |
+| `REG-ISO-0002-EXECUCAO` | Data/hora, base, tipo (full/incr.), tamanho, duração, checksum, status, operador | IT §4.2 (Backup) | Registros precisos de cópias (8.13.a) |
+| `REG-ISO-0003-TESTE-RESTAURACAO` | Data, backup testado (data+hash), ambiente, executor, tempo vs. RTO, resultado, desvios, assinatura/aprovação | IT §4.4 (Teste de restauração) | Evidência de teste regular (8.13.e) |
 | `REG-ISO-0004-PLANO-TESTES` | Calendário de testes por tier + lista dos testes **realizados** vs. planejados | Governança dos testes (PO §5, por setor) | Comprova periodicidade dos testes |
-| `REG-ISO-0005-RESTAURACOES` | Data, base, solicitante, motivo (incidente/erro/perda/emergência), backup usado (data+hash), executor, RTO real vs. alvo, resultado, validação pós-restauração, observações | Execução das ITs (item 4) | Evidência de restaurações reais (≠ testes) e aderência ao RTO |
+| `REG-ISO-0005-RESTAURACOES` | Data, base, solicitante, motivo (incidente/erro/perda/emergência), backup usado (data+hash), executor, RTO real vs. alvo, resultado, validação pós-restauração, observações | IT §4.3 (Restauração) | Evidência de restaurações reais (≠ testes) e aderência ao RTO |
 | `REG-ISO-0006-INCIDENTES` | Data, base, falha detectada, causa, ação corretiva, status, responsável | Tratamento de falhas (PO §5, por setor) | Resolução de falhas de backup (8.13) |
 
 > Os registros ficam claramente separados:
@@ -261,7 +276,7 @@ A tabela detalhada abaixo descreve o conteúdo de cada REG (subsídio para criar
 - [ ] Validar tecnicamente os comandos no ambiente real (responsabilidade humana)
 
 ### Etapa 6 — Amarrar referências cruzadas
-- [ ] PO §5 (Procedimento) referencia as ITs inline; PO §6 (Matriz) referencia os REGs; cada IT §7 referencia os REGs que alimenta
+- [ ] PO §5 (Procedimento) referencia as ITs inline; PO §6 (Matriz) referencia os REGs; cada IT §5 (Matriz) referencia os REGs que alimenta
 - [ ] Atualizar o `README.md` (estrutura do repositório, tabela de arquivos e convenção de nomenclatura) para refletir IT e REG
 
 ### Etapa 7 — Revisão e aprovação
@@ -283,7 +298,7 @@ A tabela detalhada abaixo descreve o conteúdo de cada REG (subsídio para criar
 |---|---------|--------------|
 | 1 | Quais tecnologias existem (SQL, NoSQL, storage de objetos)? | Etapa 0 → define quantas ITs |
 | 2 | Storage de destino e se há cópia remota | Etapa 0 |
-| 3 | Existe ambiente de teste/sandbox? | Etapa 0 → viabilidade do item 5 das ITs |
+| 3 | Existe ambiente de teste/sandbox? | Etapa 0 → viabilidade do §4.4 das ITs |
 | 4 | Orquestração de backup existente (cron, K8s CronJob, AWS Backup) | Etapa 0 → conteúdo das ITs |
 | 5 | RPO/RTO definidos pelo negócio? | Etapa 0/2 |
 | 6 | Tiers, frequência e retenção | Etapa 2 (decisão da empresa, pós-GAP) |
