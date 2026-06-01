@@ -78,8 +78,10 @@ Roteiro de perguntas abertas (sem sugerir respostas):
 **G. Monitoramento e falhas**
 - [ ] Como se descobre que um backup falhou? Quem é avisado? O que se faz quando falha?
 
-**H. Responsabilidades**
+**H. Responsabilidades e divisão por setor**
 - [ ] Quem responde por backup hoje (executar, monitorar, aprovar)? Está formalizado?
+- [ ] Quais setores gerem backup? (já identificados: **Setor DES** e **Setor TI**) — conduzir os blocos B–G **separadamente com cada setor**, pois podem gerir de formas distintas (vira as subseções 5.1 e 5.2 do PO).
+- [ ] Quais bases/tecnologias cada setor cobre? (amarra cada subseção de setor às ITs corretas)
 
 **I. Requisitos de negócio**
 - [ ] Existe RPO (perda máxima tolerável) e RTO (tempo máximo de recuperação) definidos? Por quem?
@@ -127,7 +129,7 @@ Seis seções de topo (formato padrão de PO). O grosso do conteúdo operacional
 | **2. Abrangência** | Escopo de aplicação: processos/atividades cobertos e o **público-alvo** (áreas/cargos/pessoas que devem seguir o documento), delimitado sem ambiguidade. |
 | **3. Responsabilidades** | De forma sucinta, áreas/setores e/ou cargos responsáveis pela execução das atividades. |
 | **4. Política** | Regras e decisões que regem o backup (incl. **definições/terminologia**) — *o que* a organização determina. |
-| **5. Procedimento** | Passo a passo simples e prático das atividades, executável por qualquer colaborador. Cita as ITs onde a execução técnica é detalhada. |
+| **5. Procedimento** | Passo a passo simples e prático das atividades, executável por qualquer colaborador. **Uma subseção por setor** (Setor DES, Setor TI) descrevendo como cada um gere; a Revisão é comum. Cita as ITs onde a execução técnica é detalhada. |
 | **6. Matriz de registro** | Quadro dos registros gerados: identificação, local de armazenamento e tempo de retenção. "N/A" se o processo não gerar registros. |
 
 ### Estrutura
@@ -144,13 +146,20 @@ PO-ISO-0001-BACKUP.md
 │   ├── 4.3 Frequência por tier
 │   ├── 4.4 Retenção, armazenamento remoto e expurgo
 │   └── 4.5 Criptografia e RPO/RTO
-├── 5. Procedimento                   ← o "como gerir" (maior parte do conteúdo)
-│   ├── 5.1 Execução e agendamento dos backups (remete às ITs por tecnologia)
-│   ├── 5.2 Monitoramento e verificação de integridade
-│   ├── 5.3 Tratamento de falhas e escalonamento (SLA, fluxo Eng→DBA→TI→CISO)
-│   ├── 5.4 Restauração (remete às ITs; registra restaurações reais)
-│   ├── 5.5 Governança dos testes de restauração (periodicidade, quem aprova — remete à IT e ao REG de teste)
-│   └── 5.6 Revisão e melhoria contínua (anual ou pós-incidente; aprovação do resp. de SI)
+├── 5. Procedimento                   ← o "como gerir" (maior parte do conteúdo); uma subseção por setor
+│   ├── 5.1 Setor DES — como o setor gere backup/restauração
+│   │   ├── 5.1.1 Execução e agendamento dos backups (remete às ITs do setor)
+│   │   ├── 5.1.2 Monitoramento e verificação de integridade
+│   │   ├── 5.1.3 Tratamento de falhas e escalonamento (fluxo do setor)
+│   │   ├── 5.1.4 Restauração (remete às ITs; registra restaurações reais)
+│   │   └── 5.1.5 Governança dos testes de restauração (periodicidade, quem aprova — remete à IT e ao REG de teste)
+│   ├── 5.2 Setor TI — como o setor gere backup/restauração
+│   │   ├── 5.2.1 Execução e agendamento dos backups (remete às ITs do setor)
+│   │   ├── 5.2.2 Monitoramento e verificação de integridade
+│   │   ├── 5.2.3 Tratamento de falhas e escalonamento (fluxo do setor)
+│   │   ├── 5.2.4 Restauração (remete às ITs; registra restaurações reais)
+│   │   └── 5.2.5 Governança dos testes de restauração (periodicidade, quem aprova — remete à IT e ao REG de teste)
+│   └── 5.3 Revisão e melhoria contínua (comum aos setores; anual ou pós-incidente; aprovação do resp. de SI)
 └── 6. Matriz de registro             ← identificação · local de armazenamento · tempo de retenção
 ```
 
@@ -222,9 +231,9 @@ A tabela detalhada abaixo descreve o conteúdo de cada REG (subsídio para criar
 | `REG-ISO-0001-INVENTARIO` | Base, tecnologia, ambiente, dono, tier, RPO/RTO, frequência, retenção, destino, criptografado? | Etapa 0 + manutenção contínua | Lista das bases que **precisam** de backup |
 | `REG-ISO-0002-EXECUCAO` | Data/hora, base, tipo (full/incr.), tamanho, duração, checksum, status, operador | Execução das ITs (item 3) | Registros precisos de cópias (8.13.a) |
 | `REG-ISO-0003-TESTE-RESTAURACAO` | Data, backup testado (data+hash), ambiente, executor, tempo vs. RTO, resultado, desvios, assinatura/aprovação | IT item 5 | Evidência de teste regular (8.13.e) |
-| `REG-ISO-0004-PLANO-TESTES` | Calendário de testes por tier + lista dos testes **realizados** vs. planejados | Governança do PO (5.5) | Comprova periodicidade dos testes |
+| `REG-ISO-0004-PLANO-TESTES` | Calendário de testes por tier + lista dos testes **realizados** vs. planejados | Governança dos testes (PO §5, por setor) | Comprova periodicidade dos testes |
 | `REG-ISO-0005-RESTAURACOES` | Data, base, solicitante, motivo (incidente/erro/perda/emergência), backup usado (data+hash), executor, RTO real vs. alvo, resultado, validação pós-restauração, observações | Execução das ITs (item 4) | Evidência de restaurações reais (≠ testes) e aderência ao RTO |
-| `REG-ISO-0006-INCIDENTES` | Data, base, falha detectada, causa, ação corretiva, status, responsável | PO 5.3 | Resolução de falhas de backup (8.13) |
+| `REG-ISO-0006-INCIDENTES` | Data, base, falha detectada, causa, ação corretiva, status, responsável | Tratamento de falhas (PO §5, por setor) | Resolução de falhas de backup (8.13) |
 
 > Os registros ficam claramente separados:
 > - **lista de bancos que precisam de backup** → `REG-ISO-0001-INVENTARIO`
@@ -241,7 +250,7 @@ A tabela detalhada abaixo descreve o conteúdo de cada REG (subsídio para criar
 ### Etapa 3 — Redigir o PO (governança)
 - [ ] Seções 1–3 (objetivo com referência ao 8.13; abrangência = processos + público-alvo; responsabilidades/RACI)
 - [ ] Seção 4 (Política) = definições/terminologia (4.1) + decisões da Etapa 2
-- [ ] Seção 5 (Procedimento) = processo de gestão (execução/agendamento, monitoramento, falhas/escalonamento, restauração, governança dos testes, revisão) — **sem comandos**, remetendo às ITs
+- [ ] Seção 5 (Procedimento) = uma subseção por setor (5.1 Setor DES, 5.2 Setor TI), cada uma com execução/agendamento, monitoramento, falhas/escalonamento, restauração e governança dos testes; + 5.3 Revisão comum — **sem comandos**, remetendo às ITs
 - [ ] Seção 6 (Matriz de registro) = tabela dos REGs (ver Etapa 4)
 
 ### Etapa 4 — Criar os templates de Registro (REG)
