@@ -4,6 +4,17 @@ Repositório de procedimentos operacionais criados para atender aos controles da
 
 ---
 
+## Sobre este repositório
+
+Trabalhei **cinco anos aplicando melhoria contínua a processos de backup e restauração** — definindo políticas, padronizando a execução e amadurecendo os testes de recuperação. Este repositório é a minha forma de **registrar e compartilhar esse conhecimento de maneira genérica e reaproveitável**, desacoplado de qualquer organização.
+
+**Por que usar IA para especificar a ISO?** Escrever bons procedimentos exige fluência na norma, profundidade técnica e consistência — algo caro e demorado de produzir à mão. A IA acelera o rascunho estruturado enquanto eu mantenho o papel de especialista: valido o conteúdo técnico, ajusto à realidade do controle e aprovo. O resultado é o conhecimento que acumulei na prática, formalizado no vocabulário da ISO 27001, em uma fração do tempo (ver [IA como parceira](#ia-como-parceira-na-criação-de-procedimentos-controlados-e-auditáveis)).
+
+> ### ⚠️ Aviso de confidencialidade
+> Todo o conteúdo deste repositório é **genérico e ilustrativo**. **Não há — e não deve haver — nenhuma informação sigilosa de qualquer organização**: sem nomes reais de sistemas, hosts, IPs, credenciais, topologia de rede, dados de negócio ou configurações reais. Tecnologias, *tiers*, comandos e exemplos são didáticos. O objetivo é documentar o **método**, não a infraestrutura de ninguém.
+
+---
+
 ## Por que procedimentos operacionais para controles ISO 27001?
 
 A ISO 27001 define *o que* deve ser feito — os controles estabelecem requisitos e orientações. Os **procedimentos operacionais** transformam esses requisitos em *como* fazer: passos concretos, responsáveis definidos, critérios de sucesso e evidências auditáveis.
