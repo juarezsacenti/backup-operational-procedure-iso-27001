@@ -4,6 +4,17 @@ Repositório de procedimentos operacionais criados para atender aos controles da
 
 ---
 
+## Sobre este repositório
+
+Trabalhei **cinco anos aplicando melhoria contínua a processos de backup e restauração** — definindo políticas, padronizando a execução e amadurecendo os testes de recuperação. Este repositório é a minha forma de **registrar e compartilhar esse conhecimento de maneira genérica e reaproveitável**, desacoplado de qualquer organização.
+
+**Por que usar IA para especificar a ISO?** Escrever bons procedimentos exige fluência na norma, profundidade técnica e consistência — algo caro e demorado de produzir à mão. A IA acelera o rascunho estruturado enquanto eu mantenho o papel de especialista: valido o conteúdo técnico, ajusto à realidade do controle e aprovo. O resultado é o conhecimento que acumulei na prática, formalizado no vocabulário da ISO 27001, em uma fração do tempo (ver [IA como parceira](#ia-como-parceira-na-criação-de-procedimentos-controlados-e-auditáveis)).
+
+> ### ⚠️ Aviso de confidencialidade
+> Todo o conteúdo deste repositório é **genérico e ilustrativo**. **Não há — e não deve haver — nenhuma informação sigilosa de qualquer organização**: sem nomes reais de sistemas, hosts, IPs, credenciais, topologia de rede, dados de negócio ou configurações reais. Tecnologias, *tiers*, comandos e exemplos são didáticos. O objetivo é documentar o **método**, não a infraestrutura de ninguém.
+
+---
+
 ## Por que procedimentos operacionais para controles ISO 27001?
 
 A ISO 27001 define *o que* deve ser feito — os controles estabelecem requisitos e orientações. Os **procedimentos operacionais** transformam esses requisitos em *como* fazer: passos concretos, responsáveis definidos, critérios de sucesso e evidências auditáveis.
@@ -81,30 +92,60 @@ Quando uma tecnologia muda (nova versão do banco, mudança de storage) ou a nor
 
 ```
 .
-├── README.md                        # Este arquivo
-├── ISO-27001-8-13.md                # Texto oficial do controle 8.13 (PT-BR)
-├── PO-ISO-0001-BACKUP.md            # Procedimento Operacional: Backup, Restauração e Testes
-└── plan/
-    └── PLAN-PO-ISO-0001-BACKUP.md  # Plano de criação do PO-ISO-0001-BACKUP
+├── README.md                          # Este arquivo
+├── ISO-27001-8-13.md                  # Texto oficial do controle 8.13 (PT-BR)
+├── plan/
+│   └── PLAN-PO-ISO-0001-BACKUP.md     # Plano de criação do conjunto documental
+│
+│   # Documentos a serem produzidos a partir do plano (pirâmide documental):
+├── PO-ISO-0001-BACKUP.md              # Procedimento Operacional (governança do ciclo)
+├── IT-ISO-0001-POSTGRESQL.md          # Instrução de Trabalho: backup/restauração/teste — PostgreSQL
+├── IT-ISO-0002-MONGODB.md             # Instrução de Trabalho: backup/restauração/teste — MongoDB
+├── IT-ISO-0003-STORAGE-BUCKET.md      # Instrução de Trabalho: backup/restauração/teste — Storage Bucket
+├── REG-ISO-0001-INVENTARIO.md         # Registro: inventário de bases que requerem backup
+├── REG-ISO-0002-EXECUCAO.md           # Registro: log de execução de backups
+├── REG-ISO-0003-TESTE-RESTAURACAO.md  # Registro: evidência dos testes de restauração
+├── REG-ISO-0004-PLANO-TESTES.md       # Registro: plano e lista de testes realizados
+├── REG-ISO-0005-RESTAURACOES.md       # Registro: restaurações reais (solicitadas/emergenciais)
+└── REG-ISO-0006-INCIDENTES.md         # Registro: incidentes/falhas de backup
 ```
+
+> As tecnologias listadas nas ITs são ilustrativas — o conjunto real é definido pelo levantamento AS-IS descrito no plano.
 
 ### Descrição dos arquivos
 
+A pirâmide documental da ISO 27001 separa quatro camadas — **Política** (decisão), **Procedimento** (gestão), **Instrução de Trabalho** (execução técnica) e **Registro** (evidência). Aqui a Política é uma seção do PO; as demais camadas são documentos próprios.
+
 | Arquivo | Tipo | Descrição |
 |---------|------|-----------|
-| `ISO-27001-8-13.md` | Referência normativa | Texto do controle 8.13 da ISO/IEC 27001:2022 — *Information Backup*. Serve como âncora normativa para todos os procedimentos deste repositório. |
-| `PO-ISO-0001-BACKUP.md` | Procedimento Operacional | Procedimento que descreve como realizar backups, restaurações e testes de restauração para bancos de dados SQL e NoSQL. Implementa operacionalmente o controle 8.13. |
-| `plan/PLAN-PO-ISO-0001-BACKUP.md` | Plano de trabalho | Roteiro de criação do `PO-ISO-0001-BACKUP.md`: estrutura do documento, etapas de redação, checklists e decisões pendentes. |
+| `ISO-27001-8-13.md` | Referência normativa | Texto do controle 8.13 da ISO/IEC 27001:2022 — *Information Backup*. Âncora normativa de todos os documentos. |
+| `plan/PLAN-PO-ISO-0001-BACKUP.md` | Plano de trabalho | Roteiro de criação do conjunto documental: levantamento AS-IS, análise de lacunas, estrutura dos documentos e convenções. |
+| `PO-ISO-0001-BACKUP.md` | Procedimento Operacional | *Como gerir* o ciclo de backup/restauração: política (seção), responsabilidades, monitoramento, tratamento de falhas, governança dos testes e revisão. Sem comandos técnicos. |
+| `IT-ISO-{NNNN}-{TECNOLOGIA}.md` | Instrução de Trabalho | *Como executar* a tarefa técnica por tecnologia (uma IT por banco): comandos de backup, restauração e teste, validação e troubleshooting. |
+| `REG-ISO-{NNNN}-{TIPO}.md` | Registro / evidência | Templates a preencher: inventário de bases, log de execução, evidência de testes, plano/lista de testes, restaurações reais e incidentes. Sustentam a rastreabilidade (cláusula 7.5). |
 
 ---
 
 ## Convenção de nomenclatura
 
+Formato: **`<tipo>-<departamento>-<número>-<nome>`**
+
+| Campo | Significado |
+|-------|-------------|
+| `<tipo>` | `PO` (Procedimento Operacional), `IT` (Instrução de Trabalho) ou `REG` (Registro) |
+| `<departamento>` | Área responsável — ex.: `ISO` |
+| `<número>` | Sequência **própria de cada tipo**, independente (o `0001` de uma IT não tem relação com o `0001` do PO) |
+| `<nome>` | Tema ou identificação do documento |
+
 | Prefixo | Significado |
 |---------|-------------|
 | `ISO-27001-{seção}` | Texto de referência de um controle da norma |
-| `PO-ISO-{número}-{tema}` | Procedimento Operacional vinculado a um controle ISO 27001 |
 | `plan/PLAN-{documento}` | Plano de criação de um documento |
+| `PO-ISO-{nº}-{tema}` | Procedimento Operacional vinculado a um controle ISO 27001 |
+| `IT-ISO-{nº}-{tecnologia}` | Instrução de Trabalho (execução técnica) |
+| `REG-ISO-{nº}-{tipo}` | Registro / template de evidência |
+
+> A ligação entre IT/REG e seu PO é feita por **referência cruzada explícita** dentro dos documentos, nunca pelo número.
 
 ---
 
@@ -118,7 +159,7 @@ Quando uma tecnologia muda (nova versão do banco, mudança de storage) ou a nor
 
 O procedimento `PO-ISO-0001-BACKUP.md` implementa este controle cobrindo:
 - Política de backup (frequência, retenção, criptografia, armazenamento remoto)
-- Procedimentos por tecnologia: SQL (PostgreSQL, MySQL) e NoSQL (MongoDB, Redis)
+- Procedimentos por tecnologia (em ITs): PostgreSQL, MongoDB e Storage Bucket
 - Procedimentos de restauração com critérios de validação (RPO/RTO)
 - Testes periódicos de restauração com registro de evidências auditáveis
 - Monitoramento, alertas e gestão de falhas
@@ -139,3 +180,13 @@ O procedimento `PO-ISO-0001-BACKUP.md` implementa este controle cobrindo:
 - ISO/IEC 27001:2022 — Information security, cybersecurity and privacy protection
 - ISO/IEC 27002:2022 — Information security controls (guidance for 8.13)
 - ISO/IEC 27040 — Storage security (referenciada no controle 8.13)
+
+---
+
+## Licença
+
+Este repositório é licenciado sob a **[Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)** — ver o arquivo [`LICENSE.txt`](LICENSE.txt).
+
+Você pode compartilhar e adaptar o conteúdo, inclusive para fins comerciais, desde que **dê o devido crédito**. Sugestão de atribuição:
+
+> Baseado em "Procedimentos Operacionais — ISO 27001" de Juarez Sacenti, licenciado sob CC BY 4.0.
