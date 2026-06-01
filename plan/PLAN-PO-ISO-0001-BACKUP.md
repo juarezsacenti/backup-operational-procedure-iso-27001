@@ -148,17 +148,17 @@ PO-ISO-0001-BACKUP.md
 │   └── 4.5 Criptografia e RPO/RTO
 ├── 5. Procedimento                   ← o "como gerir" (maior parte do conteúdo); uma subseção por setor
 │   ├── 5.1 Setor DES — como o setor gere backup/restauração
-│   │   ├── 5.1.1 Execução e agendamento dos backups (remete às ITs do setor)
+│   │   ├── 5.1.1 Verificação do backup automático (config/agendamento ativos — remete à IT §4.2)
 │   │   ├── 5.1.2 Monitoramento e verificação de integridade
 │   │   ├── 5.1.3 Tratamento de falhas e escalonamento (fluxo do setor)
-│   │   ├── 5.1.4 Restauração (remete às ITs; registra restaurações reais)
-│   │   └── 5.1.5 Governança dos testes de restauração (periodicidade, quem aprova — remete à IT e ao REG de teste)
+│   │   ├── 5.1.4 Restauração emergencial (usa a restauração da IT §4.3; governança e aprovação aqui; registra em REG-0005)
+│   │   └── 5.1.5 Governança dos testes de restauração (periodicidade, quem aprova — remete à IT §4.4 e ao REG-0003)
 │   ├── 5.2 Setor TI — como o setor gere backup/restauração
-│   │   ├── 5.2.1 Execução e agendamento dos backups (remete às ITs do setor)
+│   │   ├── 5.2.1 Verificação do backup automático (config/agendamento ativos — remete à IT §4.2)
 │   │   ├── 5.2.2 Monitoramento e verificação de integridade
 │   │   ├── 5.2.3 Tratamento de falhas e escalonamento (fluxo do setor)
-│   │   ├── 5.2.4 Restauração (remete às ITs; registra restaurações reais)
-│   │   └── 5.2.5 Governança dos testes de restauração (periodicidade, quem aprova — remete à IT e ao REG de teste)
+│   │   ├── 5.2.4 Restauração emergencial (usa a restauração da IT §4.3; governança e aprovação aqui; registra em REG-0005)
+│   │   └── 5.2.5 Governança dos testes de restauração (periodicidade, quem aprova — remete à IT §4.4 e ao REG-0003)
 │   └── 5.3 Revisão e melhoria contínua (comum aos setores; anual ou pós-incidente; aprovação do resp. de SI)
 └── 6. Matriz de registro             ← identificação · local de armazenamento · tempo de retenção
 ```
@@ -169,7 +169,7 @@ Toda execução técnica (comandos, scripts) saiu para as ITs (citadas inline no
 
 ## Estrutura sugerida das Instruções de Trabalho (IT) — uma por tecnologia
 
-Um arquivo por tecnologia, cobrindo backup + restauração + teste daquele banco. Conjunto inicial (ajustar ao que o AS-IS revelar):
+Um arquivo por tecnologia, focado em **restauração e seu teste** (+ referência à configuração do backup automático). Como o backup é gerado automaticamente, **não há IT de "execução de backup"**; e como a restauração emergencial usa os mesmos passos do teste, **há uma única instrução de restauração** (a governança da emergência fica no PO §5). Conjunto inicial (ajustar ao que o AS-IS revelar):
 
 ```
 IT-ISO-0001-POSTGRESQL.md
@@ -186,30 +186,28 @@ Cada IT segue a **mesma estrutura de seções de topo** do padrão (Objetivo, Ab
 | **1. Objetivo** | Propósito da IT e o resultado esperado. |
 | **2. Abrangência** | Escopo: tecnologia/versões cobertas e o **público-alvo** (quem executa — ex.: time do Setor DES ou TI responsável por aquela tecnologia). |
 | **3. Responsabilidades** | De forma sucinta, cargos/áreas que executam a IT. |
-| **4. Instrução de trabalho** | O passo a passo técnico (pré-requisitos, backup, restauração, teste, troubleshooting). |
+| **4. Instrução de trabalho** | O passo a passo técnico: pré-requisitos, configuração do backup automático (referência), restauração e seu teste, troubleshooting. |
 | **5. Matriz de registro** | Registros que a IT alimenta: identificação, local de armazenamento, tempo de retenção. "N/A" se não houver. |
 
 ### Template comum de cada IT
 
 ```
-IT-ISO-{NNNN}-{TECNOLOGIA}.md
+IT-ISO-{NNNN}-{TECNOLOGIA}.md   (restauração e seu teste)
 ├── 1. Objetivo (propósito da IT + resultado esperado)
 ├── 2. Abrangência (tecnologia/versões cobertas; público-alvo: quem executa)
 ├── 3. Responsabilidades (cargos/áreas que executam — sucinto)
 ├── 4. Instrução de trabalho
 │   ├── 4.1 Pré-requisitos (acessos, ferramentas, variáveis de ambiente, permissões)
-│   ├── 4.2 Backup
-│   │   ├── 4.2.1 Comando/ferramenta nativa (pg_dump, mongodump, aws s3 sync / gsutil rsync, versionamento de bucket…)
-│   │   ├── 4.2.2 Compressão e verificação de integridade (checksum)
-│   │   └── 4.2.3 Upload para o storage e versionamento
-│   ├── 4.3 Restauração
+│   ├── 4.2 Configuração do backup automático (referência)
+│   │       — onde está definida (console/IaC), agendamento, retenção; como verificar que rodou e está íntegro
+│   ├── 4.3 Restauração (mesmos passos para teste E emergência)
 │   │   ├── 4.3.1 Pré-condições (parar serviço, espaço, permissões)
-│   │   ├── 4.3.2 Passo a passo numerado
+│   │   ├── 4.3.2 Passo a passo numerado (pg_restore, mongorestore, restauração de bucket…)
 │   │   ├── 4.3.3 Validação pós-restauração (queries de sanidade, contagens)
 │   │   └── 4.3.4 Rollback em caso de falha
 │   ├── 4.4 Teste de restauração
 │   │   ├── 4.4.1 Provisionar ambiente isolado (docker-compose / sandbox)
-│   │   ├── 4.4.2 Executar restauração e medir tempo (vs. RTO)
+│   │   ├── 4.4.2 Executar a restauração (4.3) e medir tempo (vs. RTO)
 │   │   └── 4.4.3 Critérios de aprovação / falha
 │   └── 4.5 Erros comuns e troubleshooting
 └── 5. Matriz de registro (REGs que esta IT alimenta — identificação · local · retenção; "N/A" se não houver)
@@ -243,7 +241,7 @@ A tabela detalhada abaixo descreve o conteúdo de cada REG (subsídio para criar
 | Registro | Conteúdo (colunas) | Alimentado por | Atende ao 8.13 |
 |----------|--------------------|----------------|----------------|
 | `REG-ISO-0001-INVENTARIO` | Base, tecnologia, ambiente, dono, tier, RPO/RTO, frequência, retenção, destino, criptografado? | Etapa 0 + manutenção contínua | Lista das bases que **precisam** de backup |
-| `REG-ISO-0002-EXECUCAO` | Data/hora, base, tipo (full/incr.), tamanho, duração, checksum, status, operador | IT §4.2 (Backup) | Registros precisos de cópias (8.13.a) |
+| `REG-ISO-0002-EXECUCAO` | Data/hora, base, tipo (full/incr.), tamanho, duração, checksum, status | Automação de backup (log); verificado no PO §5 | Registros precisos de cópias (8.13.a) |
 | `REG-ISO-0003-TESTE-RESTAURACAO` | Data, backup testado (data+hash), ambiente, executor, tempo vs. RTO, resultado, desvios, assinatura/aprovação | IT §4.4 (Teste de restauração) | Evidência de teste regular (8.13.e) |
 | `REG-ISO-0004-PLANO-TESTES` | Calendário de testes por tier + lista dos testes **realizados** vs. planejados | Governança dos testes (PO §5, por setor) | Comprova periodicidade dos testes |
 | `REG-ISO-0005-RESTAURACOES` | Data, base, solicitante, motivo (incidente/erro/perda/emergência), backup usado (data+hash), executor, RTO real vs. alvo, resultado, validação pós-restauração, observações | IT §4.3 (Restauração) | Evidência de restaurações reais (≠ testes) e aderência ao RTO |
