@@ -93,7 +93,13 @@ Quando uma tecnologia muda (nova versão do banco, mudança de storage) ou a nor
 ```
 .
 ├── README.md                          # Este arquivo
+├── LICENSE.txt                        # Licença CC BY 4.0
 ├── ISO-27001-8-13.md                  # Texto oficial do controle 8.13 (PT-BR)
+├── .claude/skills/                    # Skills (método executável — ver "Passos futuros")
+│   ├── iso-procedimento/              # Pipeline: AS-IS → GAP → PO/IT/REG
+│   ├── restauracao-postgresql/        # Execução assistida de restauração — PostgreSQL
+│   ├── restauracao-mongodb/           # Execução assistida de restauração — MongoDB
+│   └── restauracao-storage-bucket/    # Execução assistida de restauração — Storage Bucket
 ├── plan/
 │   └── PLAN-PO-ISO-0001-BACKUP.md     # Plano de criação do conjunto documental
 │
@@ -180,6 +186,39 @@ O procedimento `PO-ISO-0001-BACKUP.md` implementa este controle cobrindo:
 - ISO/IEC 27001:2022 — Information security, cybersecurity and privacy protection
 - ISO/IEC 27002:2022 — Information security controls (guidance for 8.13)
 - ISO/IEC 27040 — Storage security (referenciada no controle 8.13)
+
+---
+
+## Passos futuros
+
+Este repositório evolui em duas frentes: os **documentos** (PO/IT/REG por controle) e o
+**método** (os skills que os produzem e executam).
+
+### Documentos
+- Produzir, a partir do `plan/`, o `PO-ISO-0001-BACKUP` e as ITs/REGs correspondentes.
+- Cobrir novos controles da ISO 27001, cada um com seu próprio `plan/PLAN-PO-ISO-{nº}-{tema}`.
+
+### Skills (`.claude/skills/`)
+O método deixou de ser apenas prosa e passou a ser **executável e versionado**:
+
+| Skill | Papel |
+|-------|-------|
+| `iso-procedimento` | Pipeline completo: AS-IS (anti-viés) → GAP → decisões → PO/IT/REG, nas convenções do repo. **Gera um `plan/` por controle** (não substitui o plano). |
+| `restauracao-postgresql` | Execução assistida da restauração PostgreSQL (teste e emergência), com registro de evidência. |
+| `restauracao-mongodb` | Execução assistida da restauração MongoDB. |
+| `restauracao-storage-bucket` | Execução assistida da restauração de object storage. |
+
+### Melhoria contínua dos skills
+Os skills são tratados como artefatos vivos, sob o mesmo rigor dos procedimentos:
+- **Aprende-se com o uso:** após cada execução, registra-se o que faltou ou atritou
+  (pergunta que não cobriu um caso, passo ausente) e ajustam-se templates, banco de
+  perguntas e guardrails.
+- **Versionado no git:** cada mudança de skill é commitada com o aprendizado que a motivou,
+  preservando a rastreabilidade.
+- **Acompanha a norma e a tecnologia:** revisões da ISO ou novas tecnologias entram de forma
+  incremental, mantendo a coerência entre skill, `plan/` de referência e documentos.
+- **Humano no comando:** os skills aceleram e padronizam o rascunho/execução; validação
+  técnica, julgamento de risco e aprovação formal permanecem do especialista.
 
 ---
 
