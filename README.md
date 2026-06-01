@@ -81,30 +81,61 @@ Quando uma tecnologia muda (nova versão do banco, mudança de storage) ou a nor
 
 ```
 .
-├── README.md                        # Este arquivo
-├── ISO-27001-8-13.md                # Texto oficial do controle 8.13 (PT-BR)
-├── PO-ISO-0001-BACKUP.md            # Procedimento Operacional: Backup, Restauração e Testes
-└── plan/
-    └── PLAN-PO-ISO-0001-BACKUP.md  # Plano de criação do PO-ISO-0001-BACKUP
+├── README.md                          # Este arquivo
+├── ISO-27001-8-13.md                  # Texto oficial do controle 8.13 (PT-BR)
+├── plan/
+│   └── PLAN-PO-ISO-0001-BACKUP.md     # Plano de criação do conjunto documental
+│
+│   # Documentos a serem produzidos a partir do plano (pirâmide documental):
+├── PO-ISO-0001-BACKUP.md              # Procedimento Operacional (governança do ciclo)
+├── IT-ISO-0001-POSTGRESQL.md          # Instrução de Trabalho: backup/restauração/teste — PostgreSQL
+├── IT-ISO-0002-MYSQL.md               # Instrução de Trabalho: backup/restauração/teste — MySQL
+├── IT-ISO-0003-MONGODB.md             # Instrução de Trabalho: backup/restauração/teste — MongoDB
+├── IT-ISO-0004-REDIS.md               # Instrução de Trabalho: backup/restauração/teste — Redis
+├── REG-ISO-0001-INVENTARIO.md         # Registro: inventário de bases que requerem backup
+├── REG-ISO-0002-EXECUCAO.md           # Registro: log de execução de backups
+├── REG-ISO-0003-TESTE-RESTAURACAO.md  # Registro: evidência dos testes de restauração
+├── REG-ISO-0004-PLANO-TESTES.md       # Registro: plano e lista de testes realizados
+├── REG-ISO-0005-RESTAURACOES.md       # Registro: restaurações reais (solicitadas/emergenciais)
+└── REG-ISO-0006-INCIDENTES.md         # Registro: incidentes/falhas de backup
 ```
+
+> As tecnologias listadas nas ITs são ilustrativas — o conjunto real é definido pelo levantamento AS-IS descrito no plano.
 
 ### Descrição dos arquivos
 
+A pirâmide documental da ISO 27001 separa quatro camadas — **Política** (decisão), **Procedimento** (gestão), **Instrução de Trabalho** (execução técnica) e **Registro** (evidência). Aqui a Política é uma seção do PO; as demais camadas são documentos próprios.
+
 | Arquivo | Tipo | Descrição |
 |---------|------|-----------|
-| `ISO-27001-8-13.md` | Referência normativa | Texto do controle 8.13 da ISO/IEC 27001:2022 — *Information Backup*. Serve como âncora normativa para todos os procedimentos deste repositório. |
-| `PO-ISO-0001-BACKUP.md` | Procedimento Operacional | Procedimento que descreve como realizar backups, restaurações e testes de restauração para bancos de dados SQL e NoSQL. Implementa operacionalmente o controle 8.13. |
-| `plan/PLAN-PO-ISO-0001-BACKUP.md` | Plano de trabalho | Roteiro de criação do `PO-ISO-0001-BACKUP.md`: estrutura do documento, etapas de redação, checklists e decisões pendentes. |
+| `ISO-27001-8-13.md` | Referência normativa | Texto do controle 8.13 da ISO/IEC 27001:2022 — *Information Backup*. Âncora normativa de todos os documentos. |
+| `plan/PLAN-PO-ISO-0001-BACKUP.md` | Plano de trabalho | Roteiro de criação do conjunto documental: levantamento AS-IS, análise de lacunas, estrutura dos documentos e convenções. |
+| `PO-ISO-0001-BACKUP.md` | Procedimento Operacional | *Como gerir* o ciclo de backup/restauração: política (seção), responsabilidades, monitoramento, tratamento de falhas, governança dos testes e revisão. Sem comandos técnicos. |
+| `IT-ISO-{NNNN}-{TECNOLOGIA}.md` | Instrução de Trabalho | *Como executar* a tarefa técnica por tecnologia (uma IT por banco): comandos de backup, restauração e teste, validação e troubleshooting. |
+| `REG-ISO-{NNNN}-{TIPO}.md` | Registro / evidência | Templates a preencher: inventário de bases, log de execução, evidência de testes, plano/lista de testes, restaurações reais e incidentes. Sustentam a rastreabilidade (cláusula 7.5). |
 
 ---
 
 ## Convenção de nomenclatura
 
+Formato: **`<tipo>-<departamento>-<número>-<nome>`**
+
+| Campo | Significado |
+|-------|-------------|
+| `<tipo>` | `PO` (Procedimento Operacional), `IT` (Instrução de Trabalho) ou `REG` (Registro) |
+| `<departamento>` | Área responsável — ex.: `ISO` |
+| `<número>` | Sequência **própria de cada tipo**, independente (o `0001` de uma IT não tem relação com o `0001` do PO) |
+| `<nome>` | Tema ou identificação do documento |
+
 | Prefixo | Significado |
 |---------|-------------|
 | `ISO-27001-{seção}` | Texto de referência de um controle da norma |
-| `PO-ISO-{número}-{tema}` | Procedimento Operacional vinculado a um controle ISO 27001 |
 | `plan/PLAN-{documento}` | Plano de criação de um documento |
+| `PO-ISO-{nº}-{tema}` | Procedimento Operacional vinculado a um controle ISO 27001 |
+| `IT-ISO-{nº}-{tecnologia}` | Instrução de Trabalho (execução técnica) |
+| `REG-ISO-{nº}-{tipo}` | Registro / template de evidência |
+
+> A ligação entre IT/REG e seu PO é feita por **referência cruzada explícita** dentro dos documentos, nunca pelo número.
 
 ---
 
