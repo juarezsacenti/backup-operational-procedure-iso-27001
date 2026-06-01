@@ -180,3 +180,13 @@ O procedimento `PO-ISO-0001-BACKUP.md` implementa este controle cobrindo:
 - ISO/IEC 27001:2022 — Information security, cybersecurity and privacy protection
 - ISO/IEC 27002:2022 — Information security controls (guidance for 8.13)
 - ISO/IEC 27040 — Storage security (referenciada no controle 8.13)
+
+---
+
+## Licença
+
+Este repositório é licenciado sob a **[Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)** — ver o arquivo [`LICENSE.txt`](LICENSE.txt).
+
+Você pode compartilhar e adaptar o conteúdo, inclusive para fins comerciais, desde que **dê o devido crédito**. Sugestão de atribuição:
+
+> Baseado em "Procedimentos Operacionais — ISO 27001" de Juarez Sacenti, licenciado sob CC BY 4.0.
