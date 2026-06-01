@@ -173,9 +173,8 @@ Um arquivo por tecnologia, cobrindo backup + restauração + teste daquele banco
 
 ```
 IT-ISO-0001-POSTGRESQL.md
-IT-ISO-0002-MYSQL.md
-IT-ISO-0003-MONGODB.md
-IT-ISO-0004-REDIS.md
+IT-ISO-0002-MONGODB.md
+IT-ISO-0003-STORAGE-BUCKET.md
 ```
 
 **Template comum de cada IT:**
@@ -185,7 +184,7 @@ IT-ISO-{NNNN}-{TECNOLOGIA}.md
 ├── 1. Objetivo e escopo (tecnologia, versões cobertas)
 ├── 2. Pré-requisitos (acessos, ferramentas, variáveis de ambiente, permissões)
 ├── 3. Procedimento de Backup
-│   ├── 3.1 Comando/ferramenta nativa (pg_dump, mysqldump, mongodump, BGSAVE…)
+│   ├── 3.1 Comando/ferramenta nativa (pg_dump, mongodump, aws s3 sync / gsutil rsync, versionamento de bucket…)
 │   ├── 3.2 Compressão e verificação de integridade (checksum)
 │   └── 3.3 Upload para o storage e versionamento
 ├── 4. Procedimento de Restauração
@@ -282,7 +281,7 @@ A tabela detalhada abaixo descreve o conteúdo de cada REG (subsídio para criar
 
 | # | Questão | Resolvida em |
 |---|---------|--------------|
-| 1 | Quais tecnologias SQL/NoSQL existem? | Etapa 0 → define quantas ITs |
+| 1 | Quais tecnologias existem (SQL, NoSQL, storage de objetos)? | Etapa 0 → define quantas ITs |
 | 2 | Storage de destino e se há cópia remota | Etapa 0 |
 | 3 | Existe ambiente de teste/sandbox? | Etapa 0 → viabilidade do item 5 das ITs |
 | 4 | Orquestração de backup existente (cron, K8s CronJob, AWS Backup) | Etapa 0 → conteúdo das ITs |

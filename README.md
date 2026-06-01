@@ -89,9 +89,8 @@ Quando uma tecnologia muda (nova versão do banco, mudança de storage) ou a nor
 │   # Documentos a serem produzidos a partir do plano (pirâmide documental):
 ├── PO-ISO-0001-BACKUP.md              # Procedimento Operacional (governança do ciclo)
 ├── IT-ISO-0001-POSTGRESQL.md          # Instrução de Trabalho: backup/restauração/teste — PostgreSQL
-├── IT-ISO-0002-MYSQL.md               # Instrução de Trabalho: backup/restauração/teste — MySQL
-├── IT-ISO-0003-MONGODB.md             # Instrução de Trabalho: backup/restauração/teste — MongoDB
-├── IT-ISO-0004-REDIS.md               # Instrução de Trabalho: backup/restauração/teste — Redis
+├── IT-ISO-0002-MONGODB.md             # Instrução de Trabalho: backup/restauração/teste — MongoDB
+├── IT-ISO-0003-STORAGE-BUCKET.md      # Instrução de Trabalho: backup/restauração/teste — Storage Bucket
 ├── REG-ISO-0001-INVENTARIO.md         # Registro: inventário de bases que requerem backup
 ├── REG-ISO-0002-EXECUCAO.md           # Registro: log de execução de backups
 ├── REG-ISO-0003-TESTE-RESTAURACAO.md  # Registro: evidência dos testes de restauração
@@ -149,7 +148,7 @@ Formato: **`<tipo>-<departamento>-<número>-<nome>`**
 
 O procedimento `PO-ISO-0001-BACKUP.md` implementa este controle cobrindo:
 - Política de backup (frequência, retenção, criptografia, armazenamento remoto)
-- Procedimentos por tecnologia: SQL (PostgreSQL, MySQL) e NoSQL (MongoDB, Redis)
+- Procedimentos por tecnologia (em ITs): PostgreSQL, MongoDB e Storage Bucket
 - Procedimentos de restauração com critérios de validação (RPO/RTO)
 - Testes periódicos de restauração com registro de evidências auditáveis
 - Monitoramento, alertas e gestão de falhas
