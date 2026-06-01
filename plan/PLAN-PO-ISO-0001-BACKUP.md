@@ -109,7 +109,7 @@ A partir do AS-IS + GAP, a empresa **decide** (a IA não decide por ela):
 - [ ] Criptografia (trânsito/repouso) e gestão de chaves
 - [ ] RPO/RTO por tier (validados pela área de negócio)
 
-**Saída:** decisões registradas — viram a Seção 6 do PO.
+**Saída:** decisões registradas — viram a Seção 4 (Política) do PO.
 
 ---
 
@@ -117,28 +117,33 @@ A partir do AS-IS + GAP, a empresa **decide** (a IA não decide por ela):
 
 Enxuto: governança e processo, **sem comandos técnicos** (esses vão para as ITs) e **sem evidências** (essas vão para os REGs).
 
+Seis seções de topo (formato padrão de PO). O grosso do conteúdo operacional concentra-se em **5. Procedimento**; as demais seções são curtas.
+
 ```
 PO-ISO-0001-BACKUP.md
 ├── 1. Objetivo
-├── 2. Escopo
-├── 3. Referências (normativas + documentos relacionados: ITs e REGs)
-├── 4. Definições e Terminologia (RPO, RTO, full/incremental/diferencial…)
-├── 5. Responsabilidades (RACI)
-├── 6. Política de Backup            ← decisões da Etapa 2
-│   ├── 6.1 Classificação / tiers de criticidade
-│   ├── 6.2 Frequência por tier
-│   ├── 6.3 Retenção, armazenamento remoto e expurgo
-│   └── 6.4 Criptografia e RPO/RTO
-├── 7. Gestão do ciclo de backup e restauração   ← o "como gerir"
-│   ├── 7.1 Execução e agendamento (remete às ITs por tecnologia)
-│   ├── 7.2 Monitoramento e verificação de integridade
-│   ├── 7.3 Tratamento de falhas e escalonamento (SLA, fluxo Eng→DBA→TI→CISO)
-│   └── 7.4 Governança dos testes de restauração (periodicidade, quem aprova — remete à IT e ao REG de teste)
-├── 8. Registros e evidências (lista os REGs, retenção e onde ficam — cláusula 7.5)
-└── 9. Revisão e melhoria contínua (anual ou pós-incidente; aprovação do resp. de SI)
+├── 2. Abrangência
+│   ├── 2.1 Definições e terminologia (RPO, RTO, full/incremental/diferencial…)
+│   └── 2.2 Documentos de referência e relacionados (controle 8.13, ITs, REGs)
+├── 3. Responsabilidades (RACI)
+├── 4. Política                       ← decisões da Etapa 2
+│   ├── 4.1 Classificação / tiers de criticidade
+│   ├── 4.2 Frequência por tier
+│   ├── 4.3 Retenção, armazenamento remoto e expurgo
+│   └── 4.4 Criptografia e RPO/RTO
+├── 5. Procedimento                   ← o "como gerir" (maior parte do conteúdo)
+│   ├── 5.1 Execução e agendamento dos backups (remete às ITs por tecnologia)
+│   ├── 5.2 Monitoramento e verificação de integridade
+│   ├── 5.3 Tratamento de falhas e escalonamento (SLA, fluxo Eng→DBA→TI→CISO)
+│   ├── 5.4 Restauração (remete às ITs; registra restaurações reais)
+│   ├── 5.5 Governança dos testes de restauração (periodicidade, quem aprova — remete à IT e ao REG de teste)
+│   └── 5.6 Revisão e melhoria contínua (anual ou pós-incidente; aprovação do resp. de SI)
+└── 6. Matriz de registro             ← tabela dos REGs (evidência, responsável, retenção, local — cláusula 7.5)
 ```
 
-De 13 seções com scripts embutidos para **9 seções de governança**. Toda execução técnica saiu para as ITs; toda evidência saiu para os REGs.
+Toda execução técnica (comandos, scripts) saiu para as ITs; toda evidência, para os REGs. O PO fica enxuto e estável: mudanças de ferramenta/versão afetam as ITs, não o procedimento.
+
+> **Ponto a confirmar na revisão:** coloquei **Definições** (2.1) e **Documentos de referência** (2.2) como subseções de *Abrangência*, já que não são seções de topo na sua lista. Se preferir outro lugar (ex.: Definições dentro de *Objetivo*, ou referências no rodapé), ajusto.
 
 ---
 
@@ -182,16 +187,16 @@ A IT é o lugar dos comandos, scripts e checklists técnicos — pode ser revisa
 
 ## Estrutura sugerida dos Registros (REG)
 
-Evidências e listas exigidas para rastreabilidade do 8.13 e da cláusula 7.5. Cada REG é um **template a ser preenchido** (planilha/tabela ou ferramenta de GRC).
+Evidências e listas exigidas para rastreabilidade do 8.13 e da cláusula 7.5. Cada REG é um **template a ser preenchido** (planilha/tabela ou ferramenta de GRC). A tabela abaixo é a base da **Seção 6 (Matriz de registro)** do PO — que lista cada registro com seu responsável, retenção e local de guarda.
 
 | Registro | Conteúdo (colunas) | Alimentado por | Atende ao 8.13 |
 |----------|--------------------|----------------|----------------|
 | `REG-ISO-0001-INVENTARIO` | Base, tecnologia, ambiente, dono, tier, RPO/RTO, frequência, retenção, destino, criptografado? | Etapa 0 + manutenção contínua | Lista das bases que **precisam** de backup |
 | `REG-ISO-0002-EXECUCAO` | Data/hora, base, tipo (full/incr.), tamanho, duração, checksum, status, operador | Execução das ITs (item 3) | Registros precisos de cópias (8.13.a) |
 | `REG-ISO-0003-TESTE-RESTAURACAO` | Data, backup testado (data+hash), ambiente, executor, tempo vs. RTO, resultado, desvios, assinatura/aprovação | IT item 5 | Evidência de teste regular (8.13.e) |
-| `REG-ISO-0004-PLANO-TESTES` | Calendário de testes por tier + lista dos testes **realizados** vs. planejados | Governança do PO (7.4) | Comprova periodicidade dos testes |
+| `REG-ISO-0004-PLANO-TESTES` | Calendário de testes por tier + lista dos testes **realizados** vs. planejados | Governança do PO (5.5) | Comprova periodicidade dos testes |
 | `REG-ISO-0005-RESTAURACOES` | Data, base, solicitante, motivo (incidente/erro/perda/emergência), backup usado (data+hash), executor, RTO real vs. alvo, resultado, validação pós-restauração, observações | Execução das ITs (item 4) | Evidência de restaurações reais (≠ testes) e aderência ao RTO |
-| `REG-ISO-0006-INCIDENTES` | Data, base, falha detectada, causa, ação corretiva, status, responsável | PO 7.3 | Resolução de falhas de backup (8.13) |
+| `REG-ISO-0006-INCIDENTES` | Data, base, falha detectada, causa, ação corretiva, status, responsável | PO 5.3 | Resolução de falhas de backup (8.13) |
 
 > Os registros ficam claramente separados:
 > - **lista de bancos que precisam de backup** → `REG-ISO-0001-INVENTARIO`
@@ -206,10 +211,10 @@ Evidências e listas exigidas para rastreabilidade do 8.13 e da cláusula 7.5. C
 ## Etapas de criação dos documentos (após Etapas 0–2)
 
 ### Etapa 3 — Redigir o PO (governança)
-- [ ] Seções 1–5 (objetivo, escopo, referências, definições, RACI)
-- [ ] Seção 6 = decisões da Etapa 2
-- [ ] Seção 7 = processo de gestão (execução/agendamento, monitoramento, falhas/escalonamento, governança dos testes) — **sem comandos**, remetendo às ITs
-- [ ] Seções 8–9 (registros e revisão)
+- [ ] Seções 1–3 (objetivo; abrangência com definições e referências; responsabilidades/RACI)
+- [ ] Seção 4 (Política) = decisões da Etapa 2
+- [ ] Seção 5 (Procedimento) = processo de gestão (execução/agendamento, monitoramento, falhas/escalonamento, restauração, governança dos testes, revisão) — **sem comandos**, remetendo às ITs
+- [ ] Seção 6 (Matriz de registro) = tabela dos REGs (ver Etapa 4)
 
 ### Etapa 4 — Criar os templates de Registro (REG)
 - [ ] Criar os 6 REGs como templates vazios com cabeçalhos definidos
@@ -220,7 +225,7 @@ Evidências e listas exigidas para rastreabilidade do 8.13 e da cláusula 7.5. C
 - [ ] Validar tecnicamente os comandos no ambiente real (responsabilidade humana)
 
 ### Etapa 6 — Amarrar referências cruzadas
-- [ ] PO §3 e §7 referenciam as ITs; PO §8 referencia os REGs; cada IT §7 referencia os REGs que alimenta
+- [ ] PO §2.2 e §5 referenciam as ITs; PO §6 (matriz) referencia os REGs; cada IT §7 referencia os REGs que alimenta
 - [ ] Atualizar o `README.md` (estrutura do repositório, tabela de arquivos e convenção de nomenclatura) para refletir IT e REG
 
 ### Etapa 7 — Revisão e aprovação
@@ -233,7 +238,7 @@ Evidências e listas exigidas para rastreabilidade do 8.13 e da cláusula 7.5. C
 
 | # | Decisão | Efeito |
 |---|---------|--------|
-| 1 | Política como **seção do PO** (não documento separado) | Mantém o conjunto enxuto; Seção 6 do PO |
+| 1 | Política como **seção do PO** (não documento separado) | Mantém o conjunto enxuto; Seção 4 (Política) do PO |
 | 2 | **Uma IT por tecnologia** (backup+restauração+teste juntos) | Define os arquivos `IT-ISO-0001-{TECNOLOGIA}` |
 
 ## Decisões que emergem do AS-IS (não pré-definir)
